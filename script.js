@@ -4,7 +4,11 @@ let loadImgButton = document.getElementsByClassName("btn btn-primary my-2")[0];
 let loadSecondBtn = document.getElementsByClassName(
   "btn btn-secondary my-2"
 )[0];
+let editBtn = document.querySelectorAll(
+  ".btn-group .btn.btn-sm.btn-outline-secondary:last-child"
+);
 let photoContainer = document.querySelector(".img-row");
+let cardBody = document.querySelectorAll(".col-md-4");
 const options = {
   method: "GET",
   headers: {
@@ -60,8 +64,19 @@ loadImgButton.addEventListener("click", () => {
 loadSecondBtn.addEventListener("click", () => {
   getSecondaryPics();
 });
-// window.onload = () => {
-//   getPicture();
-//     getSecondaryPics();
-// };
+
+function hideCard() {
+  for (let i = 0; i < editBtn.length; i++) {
+    editBtn[i].addEventListener("click", function () {
+      this.parentElement.parentElement.parentElement.parentElement.remove();
+    });
+  }
+}
+hideCard();
+window.onload = () => {
+  console.log("edit", editBtn);
+  for (let i = 0; i < editBtn.length; i++) {
+    editBtn[i].textContent = "Hide";
+  }
+};
 // getPicture();
