@@ -84,12 +84,6 @@
           padding-bottom: 6rem;
         }
       }
-      .displayImg {
-        display: flex;
-      }
-      .displayImgNone {
-        display: none;
-      }
       .jumbotron p:last-child {
         margin-bottom: 0;
       }
@@ -208,13 +202,26 @@
             <a href="#" class="btn btn-primary my-2">Load Images</a>
             <a href="#" class="btn btn-secondary my-2">Load Secondary Images</a>
           </p>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              oninput="handleSearchQuery(event)"
+            />
+            <!-- The oninput event occurs when an element gets user input.
+              This event occurs when the value of an <input> or <textarea> element is changed. -->
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                onclick="searchImages()"
+              >
+                Search
+              </button>
+            </div>
+          </div>
         </div>
       </section>
-      <div class="bg-light">
-        <div class="container">
-          <div class="row img-row"></div>
-        </div>
-      </div>
 
       <div class="album py-5 bg-light">
         <div class="container">

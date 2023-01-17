@@ -3,7 +3,7 @@ let photoContainer = document.querySelector(".img-row");
 window.onload = () => {
   let rowGrid = document.getElementById("myCards");
   for (let i = 0; i < 12; i++) {
-    rowGrid.innerHTML += `<div class="col">
+    rowGrid.innerHTML += `<div class="d-flex col">
     <div class="card mb-4 shadow-sm">
           <svg
             class="bd-placeholder-img card-img-top"
@@ -22,6 +22,7 @@ window.onload = () => {
             </text>
           </svg>
           <div class="card-body">
+          <h5 class="card-title">Card title</h5>
             <p class="card-text">
               This is a wider card with supporting text below as a natural
               lead-in to additional content. This content is a little bit
@@ -100,6 +101,11 @@ function getloadImage() {
         // EX5 replaces 9 min with img id
         cards[i].querySelector("small").innerText = "ID: " + fetchPhotos[i].id;
       }
+      let cardTitle = document.getElementsByClassName("card-title");
+      for (let i = 0; i < cardTitle.length; i++) {
+        cardTitle[i].innerText = fetchPhotos[i].alt;
+        // console.log("cardTitle", cardTitle);
+      }
     })
     .catch((err) => console.error(err));
 }
@@ -110,7 +116,6 @@ const getSecondaryImg = () => {
     fetch("https://api.pexels.com/v1/search?query=Ocean", options)
       .then((photos) => photos.json())
       .then((photoData) => {
-        // console.log("photo1", photoData.photos);
         const fetchPhotos = photoData.photos;
         let cards = document.getElementsByClassName("card");
         for (let i = 0; i < cards.length; i++) {
@@ -122,45 +127,26 @@ const getSecondaryImg = () => {
       .catch((err) => console.error(err));
   }
 };
-// const renderImage = (fetchPhotos) => {
-//   let cards = document.querySelectorAll(".card");
-//   console.log("renderImage", cards);
-//   let hasImage = document.querySelector(".card").querySelector("img");
-//   console.log("hasImage", hasImage);
-//   let svgs = document.querySelectorAll(".card svg");
-//   console.log("svg", svgs);
-
-//   for (let i = 0; i < cards.length; i++) {
-//     if (typeof svgs !== "undefine" && svgs !== null) {
-//       let imgNode = document.createElement("img");
-//       imgNode.src = `${fetchPhotos[i].src.portrait}`;
-//       let card = cards[i];
-//       card.replaceChild(imgNode, svgs[i]);
-//     } else {
-//       let imgNode = document.getElementsByTagName("img");
-//       imgNode.src = `${fetchPhotos[i].src.portrait}`;
-//     }
-//   }
-//   //   for (let i = 0; i < fetchPhotos.length; i++) {
-//   //     const pics = fetchPhotos[i];
-//   //     console.log("pics", pics);
-//   //     let colCreate = document.createElement("div");
-//   //     colCreate.className = "d-flex col-12 col-sm-6 col-md-4 col-lg-3 mb-4";
-//   //     colCreate.innerHTML = `
-
-//   //                 <div class="card w-100">
-//   //                     <img src=${pics.src.portrait} class="card-img-top" alt=${pics.alt}>
-//   //                     <div class="card-body">
-//   //                         <h5 class="card-title">${pics.alt}</h5>
-//   //                     </div>
-//   //             </div>
-//   //             `;
-//   //     photoContainer.appendChild(colCreate);
-//   //   }
-// };
 loadImage.addEventListener("click", () => {
   getloadImage();
 });
 loadSecondaryImg.addEventListener("click", () => {
   getSecondaryImg();
 });
+
+let searchQuery;
+
+const handleSearchQuery = (event) => {
+  console.log(event);
+  searchQuery = event.target.value.toLowerCase();
+};
+
+const searchImages = () => {
+  let hasImage = document.querySelector(".card").querySelector("img");
+
+  if (hasImage) {
+    getSecondaryImg(searchQuery);
+  } else {
+    getloadImage(searchQuery);
+  }
+};
