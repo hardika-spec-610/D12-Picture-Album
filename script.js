@@ -1,7 +1,3 @@
-let loadImgButton = document.getElementsByClassName("btn btn-primary my-2")[0];
-let loadSecondBtn = document.getElementsByClassName(
-  "btn btn-secondary my-2"
-)[0];
 let photoContainer = document.querySelector(".img-row");
 
 window.onload = () => {
@@ -72,25 +68,42 @@ function hideCard() {
   }
 }
 
-// const options = {
-//   method: "GET",
-//   headers: {
-//     Authorization:
-//       "Bearer 563492ad6f9170000100000162301b50024d45149b90f2458fc942ea",
-//   },
-// };
+let loadImage = document.getElementsByClassName("btn btn-primary my-2")[0];
+let loadSecondaryImg = document.getElementsByClassName(
+  "btn btn-secondary my-2"
+)[0];
 
-// function getPicture() {
-//   fetch("https://api.pexels.com/v1/search?query=Nature", options)
-//     .then((photos) => photos.json())
-//     .then((photoData) => {
-//       //   console.log("photo1", photoData.photos);
-//       const fetchPhotos = photoData.photos;
-//       renderImage(fetchPhotos);
-//     })
-//     .catch((err) => console.error(err));
-// }
-// const getSecondaryPics = () => {
+const options = {
+  method: "GET",
+  headers: {
+    Authorization:
+      "Bearer 563492ad6f9170000100000162301b50024d45149b90f2458fc942ea",
+  },
+};
+
+function getloadImage() {
+  fetch("https://api.pexels.com/v1/search?query=Nature", options)
+    .then((photos) => photos.json())
+    .then((photoData) => {
+      //   console.log("photo1", photoData.photos);
+      const fetchPhotos = photoData.photos;
+      let cards = document.getElementsByClassName("card");
+
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].firstElementChild.remove(); //removes svg
+        let img = document.createElement("img");
+        img.src = fetchPhotos[i].src.portrait;
+        img.className = "bd-placeholder-img card-img-top";
+
+        cards[i].insertBefore(img, cards[i].firstChild); //adds the new image before other content
+
+        // EX5 replaces 9 min with img id
+        cards[i].querySelector("small").innerText = "ID: " + fetchPhotos[i].id;
+      }
+    })
+    .catch((err) => console.error(err));
+}
+// const getSecondaryImg = () => {
 //   fetch("https://api.pexels.com/v1/search?query=Ocean", options)
 //     .then((photos) => photos.json())
 //     .then((photoData) => {
@@ -136,9 +149,9 @@ function hideCard() {
 //   //     photoContainer.appendChild(colCreate);
 //   //   }
 // };
-// loadImgButton.addEventListener("click", () => {
-//   getPicture();
-// });
-// // loadSecondBtn.addEventListener("click", () => {
-// //   getSecondaryPics();
+loadImage.addEventListener("click", () => {
+  getloadImage();
+});
+// // loadSecondaryImg.addEventListener("click", () => {
+// //   getSecondaryImg();
 // // });
