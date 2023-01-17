@@ -82,8 +82,8 @@ const options = {
   },
 };
 
-function getloadImage() {
-  fetch("https://api.pexels.com/v1/search?query=Nature", options)
+function getloadImage(query) {
+  fetch("https://api.pexels.com/v1/search?query=" + query, options)
     .then((photos) => photos.json())
     .then((photoData) => {
       //   console.log("photo1", photoData.photos);
@@ -109,11 +109,11 @@ function getloadImage() {
     })
     .catch((err) => console.error(err));
 }
-const getSecondaryImg = () => {
+const getSecondaryImg = (query) => {
   let hasImage = document.querySelector(".card").querySelector("img");
   //   console.log(hasImage);
   if (hasImage) {
-    fetch("https://api.pexels.com/v1/search?query=Ocean", options)
+    fetch("https://api.pexels.com/v1/search?query=" + query, options)
       .then((photos) => photos.json())
       .then((photoData) => {
         const fetchPhotos = photoData.photos;
@@ -125,19 +125,22 @@ const getSecondaryImg = () => {
         }
       })
       .catch((err) => console.error(err));
+  } else {
+    // if cards still have svg we need the first method to handle the change
+    getloadImage(); // the parameter "sea" changes the default value of query
   }
 };
-loadImage.addEventListener("click", () => {
-  getloadImage();
+loadImage.addEventListener("click", function () {
+  getloadImage("Nature");
 });
 loadSecondaryImg.addEventListener("click", () => {
-  getSecondaryImg();
+  getSecondaryImg("Ocean");
 });
 
 let searchQuery;
 
 const handleSearchQuery = (event) => {
-  console.log(event);
+  //   console.log(event);
   searchQuery = event.target.value.toLowerCase();
 };
 
@@ -150,3 +153,41 @@ const searchImages = () => {
     getloadImage(searchQuery);
   }
 };
+
+// just another way to handle the DOM after is being loaded
+window.addEventListener("DOMContentLoaded", () => {
+  //EX10 handles MODAL
+  document.querySelectorAll(".card .btn-group .btn:first-of-type").forEach(
+    (btn) =>
+      (btn.onclick = (e) => {
+        let cardImage =
+          // e.target.parentNode.parentNode.parentNode.parentNode.getElementsByTagName(
+          //   "img"
+          // )[0]; // finding the image node navigating the node tree
+
+          // OR:
+          // e.target.closest(".card").children[0];
+          // OR:
+          // e.target.closest(".card").firstElementChild;
+
+          //OR:
+
+          e.target.closest(".card").querySelector("img");
+
+        if (cardImage) {
+          e.target.setAttribute("data-toggle", "modal");
+          e.target.setAttribute("data-target", "#exampleModal");
+
+          let modal = document.querySelector(".modal");
+          let image = document.createElement("img");
+          image.src = cardImage.src;
+
+          image.className = "img-fluid w-100";
+          modal.querySelector(".modal-body").innerText = "";
+          modal.querySelector(".modal-body").appendChild(image);
+        } else {
+          alert("Load images first");
+        }
+      })
+  );
+});
