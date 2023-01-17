@@ -103,16 +103,25 @@ function getloadImage() {
     })
     .catch((err) => console.error(err));
 }
-// const getSecondaryImg = () => {
-//   fetch("https://api.pexels.com/v1/search?query=Ocean", options)
-//     .then((photos) => photos.json())
-//     .then((photoData) => {
-//       // console.log("photo1", photoData.photos);
-//       const fetchPhotos = photoData.photos;
-//       renderImage(fetchPhotos);
-//     })
-//     .catch((err) => console.error(err));
-// };
+const getSecondaryImg = () => {
+  let hasImage = document.querySelector(".card").querySelector("img");
+  //   console.log(hasImage);
+  if (hasImage) {
+    fetch("https://api.pexels.com/v1/search?query=Ocean", options)
+      .then((photos) => photos.json())
+      .then((photoData) => {
+        // console.log("photo1", photoData.photos);
+        const fetchPhotos = photoData.photos;
+        let cards = document.getElementsByClassName("card");
+        for (let i = 0; i < cards.length; i++) {
+          cards[i].firstElementChild.src = fetchPhotos[i].src.portrait; //switching the pre-existing image with a new image source
+          cards[i].querySelector("small").innerText =
+            "ID: " + fetchPhotos[i].id;
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+};
 // const renderImage = (fetchPhotos) => {
 //   let cards = document.querySelectorAll(".card");
 //   console.log("renderImage", cards);
@@ -152,6 +161,6 @@ function getloadImage() {
 loadImage.addEventListener("click", () => {
   getloadImage();
 });
-// // loadSecondaryImg.addEventListener("click", () => {
-// //   getSecondaryImg();
-// // });
+loadSecondaryImg.addEventListener("click", () => {
+  getSecondaryImg();
+});
